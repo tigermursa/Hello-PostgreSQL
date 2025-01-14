@@ -1,13 +1,14 @@
-// src/models/userModel.ts
 import { Model, DataTypes } from "sequelize";
-import sequelize from "../server"; // Import the sequelize instance from server.ts
+import sequelize from "../config/database"; // Import the sequelize instance from config
 
+// Define the User model
 class User extends Model {
   public id!: number;
   public username!: string;
   public email!: string;
 }
 
+// Initialize the User model
 User.init(
   {
     id: {
@@ -17,19 +18,19 @@ User.init(
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, // Username cannot be null
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true, // Email must be unique
     },
   },
   {
-    sequelize, // Pass the sequelize instance here
+    sequelize, // Pass the Sequelize instance
     modelName: "User",
     tableName: "users",
-    timestamps: false, // Optional: Adjust this based on whether you need timestamps
+    timestamps: false, // Disable timestamps
   }
 );
 

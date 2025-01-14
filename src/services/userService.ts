@@ -1,6 +1,7 @@
 import { UserInterface } from "../interface/userInterface";
 import User from "../models/userModel";
 
+// Create a new user
 export const createUser = async (user: UserInterface) => {
   try {
     const newUser = await User.create(user as any);
@@ -10,10 +11,10 @@ export const createUser = async (user: UserInterface) => {
   }
 };
 
+// Fetch all users
 export const getUsers = async () => {
   try {
-    const users = await User.findAll();
-    return users;
+    return await User.findAll();
   } catch (error) {
     throw new Error("Error fetching users: " + "error");
   }
