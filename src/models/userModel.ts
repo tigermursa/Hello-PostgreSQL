@@ -1,15 +1,8 @@
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/database"; // Import the sequelize instance from config
+import { DataTypes } from "sequelize";
+import sequelize from "../config/database";
 
-// Define the User model
-class User extends Model {
-  public id!: number;
-  public username!: string;
-  public email!: string;
-}
-
-// Initialize the User model
-User.init(
+export const User = sequelize.define(
+  "User",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -18,20 +11,56 @@ User.init(
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false, // Username cannot be null
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true, // Email must be unique
+      unique: true,
+    },
+    gender: {
+      type: DataTypes.ENUM("male", "female"),
+      allowNull: false,
+    },
+    age: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.JSONB, // For storing multiple addresses
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.JSONB, // For storing multiple phone numbers
+      allowNull: false,
+    },
+    education: {
+      type: DataTypes.JSONB, // For storing nested education information
+      allowNull: false,
+    },
+    sscBoard: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    sscGPA: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    hscBoard: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    hscGPA: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    universityRoll: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
-    sequelize, // Pass the Sequelize instance
-    modelName: "User",
     tableName: "users",
-    timestamps: false, // Disable timestamps
+    timestamps: true, // Adds createdAt and updatedAt
   }
 );
-
-export default User;

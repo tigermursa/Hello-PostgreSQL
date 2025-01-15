@@ -1,21 +1,37 @@
+import { User } from "../models/userModel";
 import { UserInterface } from "../interface/userInterface";
-import User from "../models/userModel";
 
-// Create a new user
-export const createUser = async (user: UserInterface) => {
-  try {
-    const newUser = await User.create(user as any);
-    return newUser;
-  } catch (error) {
-    throw new Error("Error creating user: " + "error");
-  }
+// Service to create a new user
+export const createUser = async (userData: UserInterface) => {
+  return await User.create(userData as any);
 };
 
-// Fetch all users
-export const getUsers = async () => {
-  try {
-    return await User.findAll();
-  } catch (error) {
-    throw new Error("Error fetching users: " + "error");
+// Service to fetch all users
+export const getAllUsers = async () => {
+  return await User.findAll();
+};
+
+// Service to fetch a single user by ID
+export const getUserById = async (id: number) => {
+  const user = await User.findByPk(id);
+  if (!user) {
+    throw new Error("User not found");
   }
+  return user;
+};
+
+// Service to update a user by ID
+export const updateUser = async (
+  id: number,
+  updatedData: Partial<UserInterface>
+) => {
+  const user = await getUserById(id);
+  return await user.update(updatedData);
+};
+
+// Service to delete a user by ID
+export const deleteUser = async (id: number) => {
+  const user = await getUserById(id);
+  await user.destroy();
+  return true;
 };

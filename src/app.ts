@@ -1,43 +1,25 @@
-import express, { Request, Response, NextFunction } from "express";
-import morgan from "morgan"; //  morgan for logging
-import {
-  createUserController,
-  getUsersController,
-} from "./controller/userController";
+import express from "express";
+import morgan from "morgan";
+import userRoutes from "./routes/userRoutes";
+import { errorHandler } from "./middleware/errorHandler";
 import sequelize from "./config/database";
 
 const app = express();
 
-// Middleware: HTTP request logging
+// Middleware
 app.use(morgan("dev"));
-
-// Middleware: JSON parsing
 app.use(express.json());
 
-// Root route
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Server working fine!");
-});
-
-// User routes
-app.post("/users", createUserController);
-app.get("/users", getUsersController);
+// Routes
+app.use("/api/users", userRoutes);
 
 // Error handling middleware
-app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
-  console.error(err); // Log the error
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || "Internal Server Error",
-  });
-});
+app.use(errorHandler);
 
-// Database synchronization (sync models with the database)
+// Database synchronization
 sequelize
   .sync()
-  .then(() => {
-    console.log("Database synchronized successfully.");
-  })
-  .catch((err) => console.error("Unable to sync database:", err));
+  .then(() => console.log("Database synchronized successfully"))
+  .catch((err) => console.error("Database synchronization failed:", err));
 
 export default app;
