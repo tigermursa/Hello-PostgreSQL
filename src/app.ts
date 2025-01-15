@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import morgan from "morgan"; // Import morgan for logging
+import morgan from "morgan"; //  morgan for logging
 import {
   createUserController,
   getUsersController,
@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Root route
 app.get("/", (_req: Request, res: Response) => {
-  res.send("Hello");
+  res.send("Server working fine!");
 });
 
 // User routes
