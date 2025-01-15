@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan"; // Import morgan for logging
 import {
   createUserController,
@@ -24,7 +24,7 @@ app.post("/users", createUserController);
 app.get("/users", getUsersController);
 
 // Error handling middleware
-app.use((err: any, _req: Request, res: Response) => {
+app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
   console.error(err); // Log the error
   res.status(err.status || 500).json({
     success: false,
