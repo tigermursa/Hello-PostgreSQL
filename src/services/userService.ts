@@ -6,9 +6,15 @@ export const createUser = async (userData: UserInterface) => {
   return await User.create(userData as any);
 };
 
-// Service to fetch all users
-export const getAllUsers = async () => {
-  return await User.findAll();
+// Service to fetch all users with pagination
+export const getAllUsers = async (page: number, limit: number) => {
+  const offset = (page - 1) * limit; // Calculate offset for pagination
+  const { count, rows } = await User.findAndCountAll({
+    offset,
+    limit,
+  });
+
+  return { total: count, users: rows };
 };
 
 // Service to fetch a single user by ID

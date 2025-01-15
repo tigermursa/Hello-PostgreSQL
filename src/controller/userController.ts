@@ -17,17 +17,28 @@ export const createUserController = async (
   }
 };
 
-// Controller to get all users
+// Controller to get all users with pagination
 export const getAllUsersController = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const users = await userService.getAllUsers();
-    res
-      .status(200)
-      .json({ success: true, message: "Users retrieved successfully", users });
+    // Extract page and limit from query parameters with default values
+    const page = parseInt(req.query.page as string, 10) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit as string, 10) || 10; // Default to 10 items per page
+
+    const { total, users } = await userService.getAllUsers(page, limit);
+
+    res.status(200).json({
+      success: true,
+      message: "Users retrieved successfully",
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit), // Calculate total number of pages
+      users,
+    });
   } catch (error) {
     next(error);
   }
@@ -60,13 +71,11 @@ export const updateUserController = async (
       Number(req.params.id),
       req.body
     );
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "User updated successfully",
-        updatedUser,
-      });
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      updatedUser,
+    });
   } catch (error) {
     next(error);
   }
